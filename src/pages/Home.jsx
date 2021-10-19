@@ -77,7 +77,6 @@ export default function Home() {
       <p>Player 1 Score: {player1Score}</p>
       <p>Player 2 Score: {player2Score}</p>
       {console.log(player1Score)}
-      {console.log(player1Score)}
     </div>
   );
 }
