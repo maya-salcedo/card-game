@@ -71,7 +71,6 @@ export default function Home() {
         Draw
       </button>
       <img src={player1?.image} alt={`${player1?.suit}-${player1?.value}`} />
-
       <img src={player2?.image} alt={`${player2?.suit}-${player2?.value}`} />
       <h2>{results}</h2>
       <h3>Remaing Cards: {remainingCard}</h3>
