@@ -6,13 +6,11 @@ export default function Home() {
   const [remainingCard, setRemainingCard] = useState(null);
   const [player1, setPlayer1] = useState({});
   const [player2, setPlayer2] = useState({});
-  const [player1Score, setPlayer1Score] = useState(0);
-  const [player2Score, setPlayer2Score] = useState(0);
+  let [player1Score, setPlayer1Score] = useState(0);
+  let [player2Score, setPlayer2Score] = useState(0);
   const [disable, setDisable] = useState(false);
 
   const identifiesWinner = (card1, card2) => {
-    console.log(card1.value);
-    console.log(card2.value);
     const valueOptions = [
       '2',
       '3',
@@ -32,21 +30,24 @@ export default function Home() {
     const card1ValueIndex = valueOptions.indexOf(card1.value);
     const card2ValueIndex = valueOptions.indexOf(card2.value);
 
-    return card1ValueIndex > card2ValueIndex
-      ? setPlayer1Score(player1Score + 1)
-      : card1ValueIndex < card2ValueIndex
-      ? setPlayer2Score(player2Score + 1)
-      : ' ';
+    switch (true) {
+      case card1ValueIndex > card2ValueIndex:
+        return setPlayer1Score(player1Score + 1);
+      case card1ValueIndex < card2ValueIndex:
+        return setPlayer2Score(player2Score + 1);
+      default:
+        return;
+    }
   };
 
-  async function handleClick() {
+  const handleClick = async () => {
     setDisable(false);
     setRemainingCard(52);
     const { data } = await axios.get(
       'https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/'
     );
     setDeckId(data?.deck_id);
-  }
+  };
 
   const handleDraw = async () => {
     const { data } = await axios.get(
@@ -61,8 +62,6 @@ export default function Home() {
   const drawCard = () => {
     handleDraw();
     identifiesWinner(player1, player2);
-    console.log(player1Score);
-    console.log(player2Score);
   };
 
   return (
