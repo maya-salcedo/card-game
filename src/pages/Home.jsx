@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function Home() {
   const [deckId, setDeckId] = useState();
@@ -33,35 +34,41 @@ export default function Home() {
 
     return card1ValueIndex > card2ValueIndex
       ? setPlayer1Score(player1Score + 1)
-      : setPlayer2Score(player2Score + 1);
+      : card1ValueIndex < card2ValueIndex
+      ? setPlayer2Score(player2Score + 1)
+      : ' ';
   };
 
   async function handleClick() {
     setDisable(false);
     setRemainingCard(52);
-    const response = await fetch(
+    const { data } = await axios.get(
       'https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/'
     );
-    const data = await response.json();
     setDeckId(data?.deck_id);
   }
 
   const handleDraw = async () => {
-    const response = await fetch(
+    const { data } = await axios.get(
       `https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`
     );
-    const data = await response.json();
     setPlayer1(data?.cards[0]);
     setPlayer2(data?.cards[1]);
     setRemainingCard(data?.remaining);
     setDisable(data?.remaining < 40 && !disable);
+  };
+
+  const drawCard = () => {
+    handleDraw();
     identifiesWinner(player1, player2);
+    console.log(player1Score);
+    console.log(player2Score);
   };
 
   return (
     <div>
       <button onClick={() => handleClick()}>New Deck, Please</button>
-      <button onClick={() => handleDraw()} disabled={disable}>
+      <button onClick={drawCard} disabled={disable}>
         Draw
       </button>
       <img src={player1?.image} alt={`${player1?.suit}-${player1?.value}`} />
