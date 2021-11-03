@@ -13,9 +13,9 @@ const Wrapper = styled.div`
   min-height: 90vh;
 `;
 const Title = styled.h1`
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   margin-bottom: 0;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
 `;
 
 const TextSmall = styled.h6`
@@ -27,15 +27,22 @@ const TextSmall = styled.h6`
 
 const TextMedium = styled.h3`
   font-weight: 500;
+  font-size: 1.2rem;
   margin: 1rem;
+  margin-bottom: 0;
+  text-align: center;
 
-  > b {
-    border: 1px solid #fff;
-    border-radius: 50%;
-    padding: 0.4rem 0.6rem;
-    color: #fff;
-    background-color: #f55c47;
+  @media (min-width: 340px) {
+    font-size: 1.5rem;
   }
+`;
+
+const TextError = styled.p`
+  color: red;
+`;
+
+const TextLoading = styled.p`
+  color: yellow;
 `;
 
 const Field = styled.div`
@@ -57,7 +64,7 @@ const ImageContainer = styled.div`
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 
     @media (min-width: 500px) {
-      height: 16.7rem;
+      height: 13.9rem;
       border-radius: 0.6rem;
     }
   }
@@ -66,31 +73,35 @@ const ImageContainer = styled.div`
     width: 6rem;
 
     @media (min-width: 500px) {
-      width: 12rem;
+      width: 10rem;
     }
   }
 
   > p {
     text-align: center;
     font-size: 0.8rem;
+    margin-bottom: 0;
   }
 `;
 
 const Button = styled.button`
   color: #fff;
-  background-color: #f55c47;
+  min-width: 3rem;
+  font-size: 1.2rem;
+  background-color: #ff0000;
+  opacity: 0.8;
   border: none;
-  padding: 0.8rem;
-  margin: 0.5rem;
+  padding: 0.65rem;
+  margin-top: 0.5rem;
   border-radius: 0.3rem;
 
   &:disabled {
-    opacity: 0.8;
+    background-color: #6e7c7c;
   }
 
   &:hover {
     &:not([disabled]) {
-      background: #ff0000;
+      opacity: 1;
     }
   }
 `;
@@ -109,6 +120,14 @@ GameWrapper.TextSmall = function GameWrapperTextSmall({ children }) {
 
 GameWrapper.TextMedium = function GameWrapperTextMedium({ children }) {
   return <TextMedium>{children}</TextMedium>;
+};
+
+GameWrapper.TextError = function GameWrapperTextError({ children }) {
+  return <TextError>{children}</TextError>;
+};
+
+GameWrapper.TextLoading = function GameWrapperTextLoading({ children }) {
+  return <TextLoading>{children}</TextLoading>;
 };
 
 GameWrapper.Field = function GameWrapperField({ children }) {

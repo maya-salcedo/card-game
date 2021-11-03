@@ -15,6 +15,9 @@ export default function Home() {
   });
   const { computer, player } = players;
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
   const valueOptions = [
     '2',
     '3',
@@ -32,21 +35,33 @@ export default function Home() {
   ];
 
   const handleNewDeck = async () => {
-    setDisable(false);
-    setRemainingCard(52);
-    const { data } = await axios.get(
-      'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1'
-    );
-    setDeckId(data?.deck_id);
+    setIsLoading(true);
+    try {
+      setDisable(false);
+      const { data } = await axios.get(
+        'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1'
+      );
+      setIsLoading(false);
+      setRemainingCard(52);
+      setDeckId(data?.deck_id);
+    } catch (err) {
+      setIsError(true);
+      console.log(err);
+    }
   };
 
   const handleDraw = async () => {
-    const { data } = await axios.get(
-      `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`
-    );
-    setPlayers({ computer: data?.cards[0], player: data?.cards[1] });
-    setRemainingCard(data?.remaining);
-    setDisable(data?.remaining < 1 && !disable);
+    try {
+      const { data } = await axios.get(
+        `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`
+      );
+      setPlayers({ computer: data?.cards[0], player: data?.cards[1] });
+      setRemainingCard(data?.remaining);
+      setDisable(data?.remaining < 1 && !disable);
+    } catch (err) {
+      setIsError(true);
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -63,12 +78,23 @@ export default function Home() {
       <GameWrapper.TextSmall>
         Ace is the highest, 2 is the lowest
       </GameWrapper.TextSmall>
-      {remainingCard && (
+      {isLoading ? (
+        <GameWrapper.TextLoading>Loading . . .</GameWrapper.TextLoading>
+      ) : (
         <GameWrapper.TextMedium>
-          Remaining Cards: <b>{remainingCard}</b>
+          Remaining Cards:{' '}
+          <span>
+            <GameWrapper.Button
+              onClick={handleNewDeck}
+              text={remainingCard > 0 ? remainingCard : 'New Deck'}
+            />
+          </span>
         </GameWrapper.TextMedium>
       )}
-      <GameWrapper.Button onClick={handleNewDeck} text="New Deck" />
+      {isError && (
+        <GameWrapper.TextError>Sorry. Error encountered.</GameWrapper.TextError>
+      )}
+
       <GameWrapper.Field>
         <GameWrapper.ImageContainer>
           <div>
