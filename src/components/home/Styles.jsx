@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  background-color: #009440;
+  background-color: #A3E4DB;
   background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
   /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
   display: flex;
